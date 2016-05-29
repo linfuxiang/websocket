@@ -106,8 +106,8 @@ input, textarea {
 #emojiWrapper img {
     margin: 2px;
     padding: 2px;
-    width: 25px;
-    height: 25px;
+    width: 54px;
+    height: 54px;
 }
 #emojiWrapper img:hover {
     background-color: blue;

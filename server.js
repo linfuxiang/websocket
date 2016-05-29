@@ -2,38 +2,34 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
-    users = [];
-//specify the html we will use
+    users = [];     //用户数组
 app.use('/', express.static(__dirname + '/www'));
-//bind the server to the 80 port
-//server.listen(3000);//for local test
-server.listen(process.env.PORT || 3000);//publish to heroku
-//server.listen(process.env.OPENSHIFT_NODEJS_PORT || 3000);//publish to openshift
-//console.log('server started on port'+process.env.PORT || 3000);
-//handle the socket
+// server.listen(process.env.PORT || 8888);
+server.listen(8888);
 io.sockets.on('connection', function(socket) {
-    //new user login
+    //监听用户登陆
     socket.on('login', function(nickname) {
         if (users.indexOf(nickname) > -1) {
             socket.emit('nickExisted');
         } else {
-            socket.userIndex = users.length;
+            // socket.userIndex = users.indexOf(nickname);
             socket.nickname = nickname;
             users.push(nickname);
             socket.emit('loginSuccess');
             io.sockets.emit('system', nickname, users.length, 'login');
         };
     });
-    //user leaves
+    //监听用户登出或断线
     socket.on('disconnect', function() {
-        users.splice(socket.userIndex, 1);
+        var userIndex = users.indexOf(socket.nickname);
+        users.splice(userIndex, 1);
         socket.broadcast.emit('system', socket.nickname, users.length, 'logout');
     });
-    //new message get
+    //监听获取信息
     socket.on('postMsg', function(msg, color) {
         socket.broadcast.emit('newMsg', socket.nickname, msg, color);
     });
-    //new image get
+    //监听获取图片
     socket.on('img', function(imgData, color) {
         socket.broadcast.emit('newImg', socket.nickname, imgData, color);
     });

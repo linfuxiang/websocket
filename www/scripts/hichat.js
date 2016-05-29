@@ -18,7 +18,7 @@ HiChat.prototype = {
             document.getElementById('info').textContent = '昵称已存在，请输入新的昵称';
         });
         this.socket.on('loginSuccess', function() {
-            document.title = 'hichat | ' + document.getElementById('nicknameInput').value;
+            document.title = '聊天室 - ' + document.getElementById('nicknameInput').value;
             document.getElementById('loginWrapper').style.display = 'none';
             document.getElementById('messageInput').focus();
         });
@@ -123,7 +123,7 @@ HiChat.prototype = {
     _initialEmoji: function() {
         var emojiContainer = document.getElementById('emojiWrapper'),
             docFragment = document.createDocumentFragment();
-        for (var i = 69; i > 0; i--) {
+        for (var i = 15; i > 0; i--) {
             var emojiItem = document.createElement('img');
             emojiItem.src = '../content/emoji/' + i + '.gif';
             emojiItem.title = i;
