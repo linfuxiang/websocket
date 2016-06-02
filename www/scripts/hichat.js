@@ -1,14 +1,21 @@
 window.onload = function() {
-    var hichat = new HiChat();
-    hichat.init();
+    /* 实例化lfxChat函数对象 */
+    var chatRoom = new lfxChat();
+    /* 初始化操作 */
+    chatRoom.init();
 };
-var HiChat = function() {
+var lfxChat = function() {
     this.socket = null;
 };
-HiChat.prototype = {
+lfxChat.prototype = {
+    /* 初始化函数 */
     init: function() {
         var that = this;
+        /* 连接服务器 */
         this.socket = io.connect();
+        /** 
+         *  监听websocket事件 
+         */
         this.socket.on('connect', function() {
             document.getElementById('info').textContent = '请输入昵称：';
             document.getElementById('nickWrapper').style.display = 'block';
@@ -40,6 +47,9 @@ HiChat.prototype = {
         this.socket.on('newImg', function(user, img, color) {
             that._displayImage(user, img, color);
         });
+        /** 
+         *  绑定各类事件 
+         */
         document.getElementById('loginBtn').addEventListener('click', function() {
             var nickName = document.getElementById('nicknameInput').value;
             if (nickName.trim().length != 0) {
