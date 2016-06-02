@@ -16,14 +16,14 @@ io.sockets.on('connection', function(socket) {
             socket.nickname = nickname;
             users.push(nickname);
             socket.emit('loginSuccess');
-            io.sockets.emit('system', nickname, users.length, 'login');
+            io.sockets.emit('system', nickname, users.length, 'login', users);
         };
     });
     //监听用户登出或断线
     socket.on('disconnect', function() {
         var userIndex = users.indexOf(socket.nickname);
         users.splice(userIndex, 1);
-        socket.broadcast.emit('system', socket.nickname, users.length, 'logout');
+        socket.broadcast.emit('system', socket.nickname, users.length, 'logout', users);
     });
     //监听获取信息
     socket.on('postMsg', function(msg, color) {

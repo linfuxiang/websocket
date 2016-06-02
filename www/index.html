@@ -5,14 +5,17 @@
         <meta name="author" content="LFX">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Websocket By LFX</title>
-        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="css/main.css">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
     </head>
     <body>
         <div class="wrapper">
             <div class="banner">
-                <h1>聊天室</h1>
+                <h2>
+                    <span class="nameList"></span>
+                    <span class="nameListAfter">的聊天室</span>
+                </h2>
                 <span id="status"></span>
             </div>
             <div id="historyMsg">
@@ -41,6 +44,6 @@
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>
-        <script src="scripts/hichat.js"></script>
+        <script src="js/websocket.js"></script>
     </body>
 </html>
