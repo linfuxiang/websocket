@@ -51,8 +51,8 @@ lfxChat.prototype = {
         this.socket.on('newMsg', function(user, msg, color) {
             that._displayNewMsg(user, msg, color);
         });
-        this.socket.on('newImg', function(user, img, color) {
-            that._displayImage(user, img, color);
+        this.socket.on('newFile', function(user, img, color, type, name) {
+            that._displayFile(user, img, color, type, name);
         });
         /** 
          *  绑定各类事件 
@@ -98,20 +98,44 @@ lfxChat.prototype = {
         document.getElementById('clearBtn').addEventListener('click', function() {
             document.getElementById('historyMsg').innerHTML = '';
         }, false);
-        document.getElementById('sendImage').addEventListener('change', function() {
+        document.getElementById('sendFile').addEventListener('change', function() {
             if (this.files.length != 0) {
                 var file = this.files[0],
                     reader = new FileReader(),
-                    color = document.getElementById('colorStyle').value;
+                    color = document.getElementById('colorStyle').value,
+                    fileType = file.name.split('.').pop();
+                    console.log(fileType);
                 if (!reader) {
                     that._displayNewMsg('系统', '你的浏览器不支持文件发送', 'red');
                     this.value = '';
                     return;
                 };
                 reader.onload = function(e) {
+                    // console.log(this);
                     this.value = '';
-                    that.socket.emit('img', e.target.result, color);
-                    that._displayImage('我', e.target.result, color);
+                    that.socket.emit('file', e.target.result, color, fileType, file.name);
+                    that._displayFile('我', e.target.result, color, fileType, file.name);
+                };
+                reader.readAsDataURL(file);
+            };
+        }, false);
+        document.getElementById('sendImage').addEventListener('change', function() {
+            if (this.files.length != 0) {
+                var file = this.files[0],
+                    reader = new FileReader(),
+                    color = document.getElementById('colorStyle').value,
+                    fileType = file.name.split('.').pop();
+                    console.log(fileType);
+                if (!reader) {
+                    that._displayNewMsg('系统', '你的浏览器不支持文件发送', 'red');
+                    this.value = '';
+                    return;
+                };
+                reader.onload = function(e) {
+                    // console.log(this);
+                    this.value = '';
+                    that.socket.emit('file', e.target.result, color, fileType, file.name);
+                    that._displayFile('我', e.target.result, color, fileType, file.name);
                 };
                 reader.readAsDataURL(file);
             };
@@ -162,19 +186,28 @@ lfxChat.prototype = {
         container.appendChild(msgToDisplay);
         container.scrollTop = container.scrollHeight;
     },
-    _displayImage: function(user, imgData, color) {
+    _displayFile: function(user, fileData, color, type, name) {
         var container = document.getElementById('historyMsg'),
             msgToDisplay = document.createElement('p'),
-            date = new Date().toTimeString().substr(0, 8);
+            date = new Date().toTimeString().substr(0, 8),
+            fileDiv;
         if(user == '我'){
             msgToDisplay.setAttribute('class', 'myMsg');
         }
-        msgToDisplay.style.color = color || '#000';
-        msgToDisplay.innerHTML = user + '<span class="timespan">(' + date + '): </span> <br/>' + '<a href="' + imgData + '" target="_blank"><img src="' + imgData + '"/></a>';
-        container.appendChild(msgToDisplay);
-        container.scrollTop = container.scrollHeight;
+        if(type == 'png' || type == 'jpg' || type == 'jpeg' || type =='gif'){
+            msgToDisplay.innerHTML = user + '<span class="timespan">(' + date + '): </span> <br/>' + '<a href="' + fileData + '" target="_blank"><img src="' + fileData + '"/></a>';
+            container.appendChild(msgToDisplay);
+            container.scrollTop = container.scrollHeight;
+        }
+        else{
+            fileDiv = '<div class="fileDiv">' + name + '<img src="img/download.png" class="download"></div>';
+            msgToDisplay.innerHTML = user + '<span class="timespan">(' + date + '): </span> <br/>' + '<a href="' + fileData + '" target="_blank">' + fileDiv + '</a>';
+            container.appendChild(msgToDisplay);
+            container.scrollTop = container.scrollHeight;
+        }
+        
     },
-    _showEmoji: function(msg) {
+    _showEmoji: function(msg){
         var match, result = msg,
             reg = /\[emoji:\d+\]/g,
             emojiIndex,
@@ -188,8 +221,5 @@ lfxChat.prototype = {
             };
         };
         return result;
-    },
-    showTitleName: function(nameList) {
-
     }
 };

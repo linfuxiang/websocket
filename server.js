@@ -29,8 +29,8 @@ io.sockets.on('connection', function(socket) {
     socket.on('postMsg', function(msg, color) {
         socket.broadcast.emit('newMsg', socket.nickname, msg, color);
     });
-    //监听获取图片
-    socket.on('img', function(imgData, color) {
-        socket.broadcast.emit('newImg', socket.nickname, imgData, color);
+    //监听获取图片或文件
+    socket.on('file', function(fileData, color, type, name) {
+        socket.broadcast.emit('newFile', socket.nickname, fileData, color, type, name);
     });
 });

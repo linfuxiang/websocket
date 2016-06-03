@@ -77,7 +77,7 @@ input, textarea {
 .imageLable {
     position: relative;
 }
-#sendImage {
+#sendImage, #sendFile{
     position: absolute;
     width: 52px;
     left: 0;
@@ -147,5 +147,26 @@ input, textarea {
 .nameListAfter{
     display: inline-block;
     position: relative;
-    top: -8px;
+    top: -7px;
+}
+.fileDiv{
+    float: right;
+    height: 100px;
+    background: white;
+    border: 2px solid lightgray;
+    border-radius: 2px;
+    line-height: 100px;
+    padding: 0 20px;
+    position: relative;
+}
+.myMsg:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.download{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 28px;
 }
