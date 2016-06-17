@@ -43,10 +43,15 @@ lfxChat.prototype = {
             document.getElementById('status').textContent = userCount + '个用户在线';
             /* 修改聊天室名称 */
             var nameList = document.getElementsByClassName('nameList')[0];
+            var sideBarList = document.getElementById("sidebar");
+                // li = document.createElement('li');
             nameList.textContent = users[0];
+            sideBarList.innerHTML = '<li>' + users[0] + '</li>';
+            console.log(users);
             for(var n=1; n<users.length; n++){
                 nameList.textContent = nameList.textContent + '、' + users[n];
-            }
+                sideBarList.innerHTML = sideBarList.innerHTML + ('<li>' + users[n] + '</li>');
+            }   
         });
         this.socket.on('newMsg', function(user, msg, color) {
             that._displayNewMsg(user, msg, color);
