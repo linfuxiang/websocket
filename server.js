@@ -5,7 +5,7 @@ var express = require('express'),
     users = [];     //用户数组
 app.use('/', express.static(__dirname + '/www'));
 // server.listen(process.env.PORT || 8888);
-server.listen(8888);
+server.listen(3000);
 io.sockets.on('connection', function(socket) {
     //监听用户登陆
     socket.on('login', function(nickname) {
